@@ -20,6 +20,7 @@ const ImageCarousel = ({ images }: { images: string[] }) => {
 				data={images}
 				renderItem={({ item }) => (
 					<Image
+						key={item}
 						source={{ uri: item }}
 						style={[styles.image, { width: windowWidth - 40 }]}
 					/>
@@ -37,6 +38,7 @@ const ImageCarousel = ({ images }: { images: string[] }) => {
 			<View style={styles.dots}>
 				{images.map((image, index) => (
 					<View
+						key={image}
 						style={[
 							styles.dot,
 							{
