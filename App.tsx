@@ -4,7 +4,12 @@ import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 
 import Router from "./src/router";
 
-export default function App() {
+import { Amplify } from "aws-amplify";
+import { withAuthenticator } from "aws-amplify-react-native";
+import awsconfig from "./src/aws-exports";
+Amplify.configure(awsconfig);
+
+function App() {
 	return (
 		<SafeAreaView style={styles.container}>
 			{/* <StatusBar style="auto" /> */}
@@ -18,3 +23,5 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 });
+
+export default withAuthenticator(App);
