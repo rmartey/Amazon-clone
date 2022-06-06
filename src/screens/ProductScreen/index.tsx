@@ -38,7 +38,7 @@ const ProductScreen = () => {
 
 	const onAddToCart = async () => {
 		const userData = await Auth.currentAuthenticatedUser();
-		console.log(userData);
+		// console.log(userData);
 
 		if (!product || !userData) {
 			return;

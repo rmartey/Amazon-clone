@@ -10,7 +10,7 @@ interface CartProductItemProps {
 		id: string;
 		quantity: number;
 		option?: string;
-		item: {
+		product: {
 			id: string;
 			title: string;
 			image: string;
@@ -23,7 +23,7 @@ interface CartProductItemProps {
 }
 
 const CartProductItem = ({ cartItem }: CartProductItemProps) => {
-	const { quantity: quantityProp, item } = cartItem;
+	const { quantity: quantityProp, product } = cartItem;
 
 	const [quantity, setQuantity] = useState(quantityProp);
 
@@ -33,31 +33,34 @@ const CartProductItem = ({ cartItem }: CartProductItemProps) => {
 				<Image
 					style={styles.image}
 					source={{
-						uri: item.image,
+						uri: product.image,
 					}}
 				/>
 				<View style={styles.rightContainer}>
 					<Text style={styles.title} numberOfLines={3}>
-						{item.title}
+						{product.title}
 					</Text>
 					{/* Ratings */}
 					<View style={styles.ratingsContainer}>
 						{[0, 0, 0, 0, 0].map((el, i) => (
 							<FontAwesome
-								key={`${item.id}-${i}`}
+								key={`${product.id}-${i}`}
 								style={styles.star}
-								name={i < Math.floor(item.avgRating) ? "star" : "star-o"}
+								name={i < Math.floor(product.avgRating) ? "star" : "star-o"}
 								color={"#e47911"}
 								size={18}
 							/>
 						))}
 
-						<Text>{item.ratings}</Text>
+						<Text>{product.ratings}</Text>
 					</View>
 					<Text style={styles.price}>
-						from ${item.price.toFixed(2)}{" "}
-						{item.oldPrice && (
-							<Text style={styles.oldPrice}> ${item.oldPrice.toFixed(2)}</Text>
+						from ${product.price.toFixed(2)}{" "}
+						{product.oldPrice && (
+							<Text style={styles.oldPrice}>
+								{" "}
+								${product.oldPrice.toFixed(2)}
+							</Text>
 						)}
 					</Text>
 				</View>
