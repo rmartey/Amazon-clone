@@ -7,6 +7,7 @@ import ShopingCartStack from "./ShoppingCartStack";
 
 import { Entypo } from "@expo/vector-icons";
 import HomeStack from "./HomeStack";
+import UserInfo from "../screens/UserInfoScreen";
 
 const BottomTabNav = () => {
 	const Tab = createBottomTabNavigator();
@@ -29,7 +30,7 @@ const BottomTabNav = () => {
 				}}
 			/>
 			<Tab.Screen
-				component={HomeScreen}
+				component={UserInfo}
 				name="Profile"
 				options={{
 					tabBarIcon: ({ color }) => (
