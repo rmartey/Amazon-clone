@@ -21,7 +21,7 @@ const ShopingCartScreen = () => {
 			).then(setCartProducts);
 		};
 		fetchCartProducts();
-	}, []);
+	}, [cartProducts]);
 
 	// useEffect(() => {
 	// 	const fetchProducts = async () => {
@@ -53,38 +53,32 @@ const ShopingCartScreen = () => {
 	return (
 		<View style={styles.page}>
 			{/* Render product component */}
-			{cartProducts.length == 0 ? (
-				<View style={{ flex: 1, justifyContent: "center" }}>
-					<Text>Cart is empty</Text>
-				</View>
-			) : (
-				<FlatList
-					data={cartProducts}
-					renderItem={({ item }) => (
-						<CartProductItem cartItem={item} />
-						// render quantity selector
-					)}
-					showsVerticalScrollIndicator={false}
-					ListHeaderComponent={
-						<View>
-							<Text style={{ fontSize: 18 }}>
-								Subtotal ({cartProducts.length} items){" "}
-								<Text style={{ color: "#e47911", fontWeight: "bold" }}>
-									${totalPrice.toFixed(2)}
-								</Text>
+			<FlatList
+				data={cartProducts}
+				renderItem={({ item }) => (
+					<CartProductItem cartItem={item} />
+					// render quantity selector
+				)}
+				showsVerticalScrollIndicator={false}
+				ListHeaderComponent={
+					<View>
+						<Text style={{ fontSize: 18 }}>
+							Subtotal ({cartProducts.length} items){" "}
+							<Text style={{ color: "#e47911", fontWeight: "bold" }}>
+								${totalPrice.toFixed(2)}
 							</Text>
-							<Button
-								text={"Proceed to checkout"}
-								onPress={onCheckout}
-								containerStyles={{
-									backgroundColor: "#f7e300",
-									borderColor: "#c7b702",
-								}}
-							/>
-						</View>
-					}
-				/>
-			)}
+						</Text>
+						<Button
+							text={"Proceed to checkout"}
+							onPress={onCheckout}
+							containerStyles={{
+								backgroundColor: "#f7e300",
+								borderColor: "#c7b702",
+							}}
+						/>
+					</View>
+				}
+			/>
 		</View>
 	);
 };

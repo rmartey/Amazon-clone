@@ -9,7 +9,11 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
 import countryList from "country-list";
+
+import { DataStore, Auth } from "aws-amplify";
+import { Order, CartProduct, OrderProduct } from "../../models";
 
 import Button from "../../components/Button";
 
@@ -18,12 +22,54 @@ import styles from "./styles";
 const countries = countryList.getData();
 
 const AddressScreen = () => {
+	const navigation = useNavigation();
+
 	const [country, setCountry] = useState(countries[0].code);
 	const [fullName, setFullName] = useState("");
 	const [phone, setPhone] = useState("");
 	const [address, setAddress] = useState("");
 	const [addressError, setAddressError] = useState("");
 	const [city, setCity] = useState("");
+
+	const saveOrder = async () => {
+		//get user details
+		const userData = await Auth.currentAuthenticatedUser();
+		//create new order
+		const newOrder = await DataStore.save(
+			new Order({
+				userSub: userData.attributes.sub,
+				fullName: fullName,
+				phoneNumber: phone,
+				country,
+				city,
+				address,
+			})
+		);
+
+		//fetch all cart items
+		const cartItems = await DataStore.query(CartProduct, (cp) =>
+			cp.userSub("eq", userData.attributes.sub)
+		);
+
+		//attach all cart items to order
+		await Promise.all(
+			cartItems.map((cartItem) =>
+				DataStore.save(
+					new OrderProduct({
+						quantity: cartItem.quantity,
+						option: cartItem.option,
+						productID: cartItem.productID,
+						orderID: newOrder.id,
+					})
+				)
+			)
+		);
+
+		//delete all cart items
+		await Promise.all(cartItems.map((cartItem) => DataStore.delete(cartItem)));
+		//redirect to home
+		navigation.navigate({ name: "Home" });
+	};
 
 	const checkOut = () => {
 		if (!fullName) {
@@ -41,6 +87,7 @@ const AddressScreen = () => {
 		if (addressError) {
 			Alert.alert("Please fix all field errors before submitings");
 		}
+		saveOrder();
 	};
 
 	const validateAddress = () => {
